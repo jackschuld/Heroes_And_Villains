@@ -10,13 +10,13 @@ from .models import Super
 def supers_list(request):
 
     if request.method == 'GET':
-        dealership_name = request.query_params.get('dealership')
-        print(dealership_name)
+        type_name = request.query_params.get('type')
+        print(type_name)
         supers = Super.objects.all()
-        if dealership_name:
-            supers = supers.filter(dealership__name=dealership_name)
+        if type_name:
+            supers = supers.filter(super_type__type=type_name)
         serializer = SupersSerializer(supers, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         serializer = SupersSerializer(data=request.data)
@@ -37,7 +37,7 @@ def supers_detail(request, pk):
         serializer = SupersSerializer(super, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'DELETE':
         super.delete()
