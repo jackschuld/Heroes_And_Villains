@@ -15,6 +15,12 @@ def supers_list(request):
         supers = Super.objects.all()
         if type_name:
             supers = supers.filter(super_type__type=type_name)
+        else:
+            heroes = Super.objects.filter(super_type__type='hero')
+            villains = Super.objects.filter(super_type__type='villain')
+            custom_response = {'heroes': SupersSerializer(heroes, many=True).data, 'villains': SupersSerializer(villains, many=True).data}
+            print(custom_response)
+            return Response(custom_response)
         serializer = SupersSerializer(supers, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
